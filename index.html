@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Be My Valentine? 💘</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      overflow: hidden;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4);
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+    }
+
+    .heart {
+      position: absolute;
+      color: white;
+      animation: float 6s linear forwards;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+    @keyframes float {
+      from { transform: translateY(100vh) scale(1) rotate(0deg); }
+      to   { transform: translateY(-10vh) scale(1.5) rotate(360deg); }
+    }
+
+    .screen {
+      position: absolute;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center; padding: 20px;
+      transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
+      z-index: 2;
+    }
+    .hidden { opacity: 0; pointer-events: none; transform: scale(0.95); }
+
+    .character-container {
+      width: 240px; height: 240px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 30px auto;
+    }
+    .character-sprite {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+      animation: bounceFloat 3s ease-in-out infinite;
+    }
+    .character-sprite.angry { animation: intenseVibrate 0.15s infinite; }
+
+    @keyframes intenseVibrate {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      10%  { transform: translate(-4px,-3px) rotate(-2deg); }
+      20%  { transform: translate(4px,3px) rotate(2deg); }
+      30%  { transform: translate(-3px,4px) rotate(-1deg); }
+      40%  { transform: translate(3px,-4px) rotate(1deg); }
+      50%  { transform: translate(-4px,3px) rotate(-2deg); }
+      60%  { transform: translate(4px,-3px) rotate(2deg); }
+      70%  { transform: translate(-3px,-4px) rotate(-1deg); }
+      80%  { transform: translate(3px,4px) rotate(1deg); }
+      90%  { transform: translate(-4px,4px) rotate(-2deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+    @keyframes bounceFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-15px) scale(1.02); }
+    }
+
+    h1 {
+      font-size: 2.8rem; font-weight: 800;
+      color: white;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      margin-bottom: 20px; line-height: 1.2; max-width: 90%;
+      animation: fadeInUp 0.6s ease-out;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    p {
+      color: white; margin-bottom: 30px;
+      font-size: 1.3rem; font-weight: 400;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      animation: fadeInUp 0.6s ease-out 0.2s backwards;
+    }
+
+    .button-container {
+      display: flex; gap: 20px;
+      justify-content: center; align-items: center;
+      min-height: 120px; position: relative;
+      flex-wrap: wrap; width: 100%; max-width: 500px;
+      animation: fadeInUp 0.6s ease-out 0.4s backwards;
+    }
+
+    button {
+      padding: 18px 45px; font-size: 1.2rem;
+      border: none; border-radius: 50px; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      font-family: 'Poppins', sans-serif; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      position: relative; overflow: hidden;
+    }
+    button:active { transform: scale(0.95) !important; }
+    .btn-content { position: relative; z-index: 1; }
+
+    .yes-btn {
+      background: linear-gradient(135deg, #ff2e63, #ff6b9d);
+      color: white; box-shadow: 0 10px 30px rgba(255,46,99,0.4);
+    }
+    .yes-btn::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    .yes-btn:hover::before { left: 100%; }
+    .yes-btn:hover {
+      background: linear-gradient(135deg, #ff1744, #ff5177);
+      box-shadow: 0 15px 40px rgba(255,46,99,0.6);
+      transform: translateY(-3px);
+    }
+    .no-btn {
+      background: linear-gradient(135deg, #666, #888);
+      color: white; box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .no-btn:hover {
+      background: linear-gradient(135deg, #555, #777);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Curtains */
+    .curtain {
+      position: absolute; width: 50%; height: 100%; top: 0;
+      background: linear-gradient(to bottom, #5c0a0a, #8b0000);
+      z-index: 10; transition: transform 1.5s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+    }
+    .curtain::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.1) 40px, rgba(0,0,0,0.1) 80px);
+    }
+    .curtain.left  { left: 0; }
+    .curtain.right { right: 0; }
+    .curtain.open-left  { transform: translateX(-100%); }
+    .curtain.open-right { transform: translateX(100%); }
+
+    canvas {
+      position: absolute; top: 0; left: 0;
+      pointer-events: none; z-index: 1000;
+    }
+
+    /* Reveal card */
+    .reveal-card {
+      background: white; border-radius: 30px;
+      padding: 60px 40px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+      animation: slideUp 0.6s cubic-bezier(0.4,0,0.2,1);
+      max-width: 500px; width: 90%;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+    .reveal-text {
+      font-size: 1.5rem; color: #ff2e63; font-weight: 600;
+      margin-bottom: 20px; animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.05); }
+    }
+    .reveal-name {
+      font-size: 2.2rem; font-weight: 800; margin-bottom: 20px;
+      background: linear-gradient(135deg, #ff2e63, #ff6b9d);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .reveal-subtitle { font-size: 1.2rem; color: #666; font-weight: 500; }
+
+    /* Final screen */
+    .final-message { max-width: 600px; width: 90%; }
+    .final-message h1 {
+      font-size: 3.2rem; margin-bottom: 30px;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.05); }
+    }
+    .final-message p {
+      font-size: 1.5rem; line-height: 1.8;
+      animation: fadeInUp 0.8s ease-out 0.3s backwards;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .character-container { width: 200px; height: 200px; }
+      h1 { font-size: 2rem; }
+      p  { font-size: 1.1rem; }
+      button { padding: 16px 38px; font-size: 1.05rem; }
+    }
+    @media (max-width: 480px) {
+      .character-container { width: 160px; height: 160px; }
+      h1 { font-size: 1.6rem; }
+      p  { font-size: 1rem; }
+      button { padding: 14px 32px; font-size: 0.95rem; }
+      .button-container { gap: 15px; min-height: 100px; }
+    }
+    @media (max-width: 360px) {
+      .character-container { width: 140px; height: 140px; }
+      h1 { font-size: 1.4rem; }
+      p  { font-size: 0.9rem; }
+      button { padding: 12px 28px; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- ===== SCREEN 1 ===== -->
+<div class="screen" id="screen1">
+  <div id="reveal-card" class="reveal-card" style="display:none">
+    <div class="reveal-text">I already know your name DUMMY!</div>
+    <div class="reveal-name">Sariah Marrionne G Arpon</div>
+    <div class="reveal-subtitle">Got ya love! ❤️</div>
+  </div>
+  <div id="screen1-main">
+    <div class="character-container">
+      <img class="character-sprite" id="char1" src="characters/happy.png" alt="Character" />
+    </div>
+    <h1>Hello there beautiful ❤️</h1>
+    <p>Click below to enter your name</p>
+    <button class="yes-btn" onclick="handleFakeInput()">
+      <span class="btn-content">Enter Name</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 2 ===== -->
+<div class="screen hidden" id="screen2">
+  <div class="curtain left"  id="curtain-left"></div>
+  <div class="curtain right" id="curtain-right"></div>
+  <div id="screen2-content" style="opacity:0; transition:opacity 1s;">
+    <div class="character-container">
+      <img class="character-sprite" id="char2" src="characters/shy.png" alt="Character" />
+    </div>
+    <h1 id="valentineTitle">WILL YOU BE MY VALENTINE? 💘</h1>
+    <div class="button-container">
+      <button class="yes-btn" id="yesBtn1" onclick="handleValentineYes()">
+        <span class="btn-content">YES</span>
+      </button>
+      <button class="no-btn" id="noBtn1" onclick="handleNo()">
+        <span class="btn-content">NO</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 3 ===== -->
+<div class="screen hidden" id="screen3">
+  <div class="character-container">
+    <img class="character-sprite" id="char3" src="characters/shy.png" alt="Character" />
+  </div>
+  <h1 id="meetTitle">Meet later and eat cheesecake or anything you want? 🍰</h1>
+  <div class="button-container">
+    <button class="yes-btn" id="yesBtn2" onclick="handleMeetYes()">
+      <span class="btn-content">YES</span>
+    </button>
+    <button class="no-btn" id="noBtn2" onclick="handleMeetNo()">
+      <span class="btn-content">NO</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== SCREEN 4 ===== -->
+<div class="screen hidden" id="screen4">
+  <div class="final-message">
+    <div class="character-container">
+      <img class="character-sprite" id="char4" src="characters/love.png" alt="Character" />
+    </div>
+    <h1>See you later my love! ❤️</h1>
+    <p>Can't wait to spend time with you and make amazing memories together! 💕✨</p>
+  </div>
+</div>
+
+<script>
+  /* ── floating hearts ── */
+  setInterval(() => {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = '❤️';
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.fontSize = (Math.random() * 20 + 10) + 'px';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+  }, 500);
+
+  /* ── set emotion helper ── */
+  function setEmotion(imgEl, emotion) {
+    imgEl.src = 'characters/' + emotion + '.png';
+    imgEl.classList.toggle('angry', emotion === 'angry');
+  }
+
+  /* ── screen 1 ── */
+  function handleFakeInput() {
+    document.getElementById('screen1-main').style.display = 'none';
+    document.getElementById('reveal-card').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('reveal-card').style.display = 'none';
+      document.getElementById('screen1-main').style.display = '';
+      goToScreen2();
+    }, 3000);
+  }
+
+  function goToScreen2() {
+    document.getElementById('screen1').classList.add('hidden');
+    document.getElementById('screen2').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('curtain-left').classList.add('open-left');
+      document.getElementById('curtain-right').classList.add('open-right');
+      setTimeout(() => {
+        document.getElementById('screen2-content').style.opacity = '1';
+      }, 1500);
+    }, 500);
+  }
+
+  /* ── screen 2: valentine question ── */
+  let noClicks = 0;
+  function handleNo() {
+    noClicks++;
+    const yesBtn = document.getElementById('yesBtn1');
+    const noBtn  = document.getElementById('noBtn1');
+
+    yesBtn.style.transform = `scale(${1 + noClicks * 0.12})`;
+    noBtn.style.transform  = `scale(${Math.max(0.3, 1 - noClicks * 0.08)})`;
+
+    if (noClicks >= 4) {
+      noBtn.style.position   = 'absolute';
+      noBtn.style.top        = (Math.random() * 100 - 50)  + 'px';
+      noBtn.style.left       = (Math.random() * 300 - 150) + 'px';
+      noBtn.style.transition = 'none';
+    }
+    if (noClicks >= 10) {
+      noBtn.style.display = 'none';
+      document.getElementById('valentineTitle').textContent = 'I HATE THAT BUTTON ANYWAY 😤💖';
+      setEmotion(document.getElementById('char2'), 'angry');
+    } else {
+      setEmotion(document.getElementById('char2'), 'shy');
+    }
+  }
+
+  function submitToGForm(entryId, value) {
+    var formId = '1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ';
+    var url = 'https://docs.google.com/forms/d/e/' + formId + '/formResponse?' + entryId + '=' + encodeURIComponent(value) + '&submit=Submit';
+    fetch(url, { method: 'POST', mode: 'no-cors' }).catch(function(){});
+  }
+
+  function handleValentineYes() {
+    submitToGForm('entry.1798592848', 'Yes');
+    setEmotion(document.getElementById('char2'), 'love');
+    launchConfetti();
+    setTimeout(() => {
+      document.getElementById('screen2').classList.add('hidden');
+      document.getElementById('screen3').classList.remove('hidden');
+    }, 800);
+  }
+
+  /* ── screen 3: meet question ── */
+  let meetNoClicks = 0;
+  function handleMeetNo() {
+    meetNoClicks++;
+    const yesBtn = document.getElementById('yesBtn2');
+    const noBtn  = document.getElementById('noBtn2');
+
+    yesBtn.style.transform = `scale(${1 + meetNoClicks * 0.12})`;
+    noBtn.style.transform  = `scale(${Math.max(0.3, 1 - meetNoClicks * 0.08)})`;
+
+    if (meetNoClicks >= 4) {
+      noBtn.style.position   = 'absolute';
+      noBtn.style.top        = (Math.random() * 100 - 50)  + 'px';
+      noBtn.style.left       = (Math.random() * 300 - 150) + 'px';
+      noBtn.style.transition = 'none';
+    }
+    if (meetNoClicks >= 10) {
+      noBtn.style.display = 'none';
+      document.getElementById('meetTitle').textContent = "YOU KNOW I'M TAKING YOU ANYWAY 😌💕";
+      setEmotion(document.getElementById('char3'), 'angry');
+    } else {
+      setEmotion(document.getElementById('char3'), 'shy');
+    }
+  }
+
+  function handleMeetYes() {
+    submitToGForm('entry.274943915', 'Yes');
+    setEmotion(document.getElementById('char3'), 'love');
+    launchConfetti();
+    setTimeout(() => {
+      document.getElementById('screen3').classList.add('hidden');
+      document.getElementById('screen4').classList.remove('hidden');
+    }, 800);
+  }
+
+  /* ── confetti ── */
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti');
+    const ctx    = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#ff2e63','#ff758c','#ff7eb3','#fad0c4','#ffffff','#ffd700'];
+    const pieces = Array.from({ length: 150 }, () => ({
+      x: Math.random() * canvas.width,
+      y: -20,
+      vx: (Math.random() - 0.5) * 8,
+      vy: Math.random() * 5 + 2,
+      r: Math.random() * 6 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+    }));
+
+    let rafId;
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.1;
+      });
+      if (pieces.some(p => p.y < canvas.height)) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        cancelAnimationFrame(rafId);
+      }
+    }
+    animate();
+  }
+</script>
+</body>
+</html>
