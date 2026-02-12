@@ -225,12 +225,7 @@
 
 <canvas id="confetti"></canvas>
 
-<!-- Hidden Google Form submitter -->
-<iframe name="hidden_iframe" style="display:none;"></iframe>
-<form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ/formResponse" method="POST" target="hidden_iframe">
-  <input type="hidden" name="entry.1798592848" id="valentine-entry" value="" />
-  <input type="hidden" name="entry.274943915" id="meet-entry" value="" />
-</form>
+
 
 <!-- ===== SCREEN 1 ===== -->
 <div class="screen" id="screen1">
@@ -365,8 +360,13 @@
   }
 
   function handleValentineYes() {
-    document.getElementById('valentine-entry').value = 'Yes';
-    document.getElementById('gform').submit();
+    var formData = new FormData();
+    formData.append('entry.1798592848', 'Yes');
+    fetch('https://docs.google.com/forms/u/0/d/e/1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ/formResponse', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    }).catch(function(){});
     setEmotion(document.getElementById('char2'), 'love');
     launchConfetti();
     setTimeout(() => {
@@ -401,8 +401,13 @@
   }
 
   function handleMeetYes() {
-    document.getElementById('meet-entry').value = 'Yes';
-    document.getElementById('gform').submit();
+    var formData = new FormData();
+    formData.append('entry.274943915', 'Yes');
+    fetch('https://docs.google.com/forms/u/0/d/e/1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ/formResponse', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    }).catch(function(){});
     setEmotion(document.getElementById('char3'), 'love');
     launchConfetti();
     setTimeout(() => {
