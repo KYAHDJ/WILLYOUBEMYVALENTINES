@@ -228,7 +228,7 @@
 <!-- Hidden Google Form submitter -->
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ/formResponse" method="POST" target="hidden_iframe">
-  <input type="hidden" id="gform-entry" name="" value="" />
+  <input type="hidden" name="entry.274943915" id="meet-entry" value="" />
 </form>
 
 <!-- ===== SCREEN 1 ===== -->
@@ -363,14 +363,7 @@
     }
   }
 
-  function submitToGForm(entryId, value) {
-    document.getElementById('gform-entry').name  = entryId;
-    document.getElementById('gform-entry').value = value;
-    document.getElementById('gform').submit();
-  }
-
   function handleValentineYes() {
-    submitToGForm('entry.1798592848', 'Yes');
     setEmotion(document.getElementById('char2'), 'love');
     launchConfetti();
     setTimeout(() => {
@@ -405,7 +398,8 @@
   }
 
   function handleMeetYes() {
-    submitToGForm('entry.274943915', 'Yes');
+    document.getElementById('meet-entry').value = 'Yes';
+    document.getElementById('gform').submit();
     setEmotion(document.getElementById('char3'), 'love');
     launchConfetti();
     setTimeout(() => {
