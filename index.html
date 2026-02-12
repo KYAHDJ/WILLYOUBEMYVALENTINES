@@ -341,17 +341,14 @@
     const yesBtn = document.getElementById('yesBtn1');
     const noBtn  = document.getElementById('noBtn1');
 
+    // YES grows bigger, NO shrinks in place - stays on screen the whole time
     yesBtn.style.transform = `scale(${1 + noClicks * 0.12})`;
-    noBtn.style.transform  = `scale(${Math.max(0.3, 1 - noClicks * 0.08)})`;
+    const noScale = Math.max(0.05, 1 - noClicks * 0.1);
+    noBtn.style.transform  = `scale(${noScale})`;
+    noBtn.style.opacity    = `${Math.max(0.1, noScale)}`;
 
-    if (noClicks >= 4) {
-      noBtn.style.position   = 'absolute';
-      noBtn.style.top        = (Math.random() * 100 - 50)  + 'px';
-      noBtn.style.left       = (Math.random() * 300 - 150) + 'px';
-      noBtn.style.transition = 'none';
-    }
     if (noClicks >= 10) {
-      noBtn.style.display = 'none';
+      noBtn.style.visibility = 'hidden';
       document.getElementById('valentineTitle').textContent = 'I HATE THAT BUTTON ANYWAY 😤💖';
       setEmotion(document.getElementById('char2'), 'angry');
     } else {
@@ -375,17 +372,14 @@
     const yesBtn = document.getElementById('yesBtn2');
     const noBtn  = document.getElementById('noBtn2');
 
+    // YES grows bigger, NO shrinks in place - stays on screen the whole time
     yesBtn.style.transform = `scale(${1 + meetNoClicks * 0.12})`;
-    noBtn.style.transform  = `scale(${Math.max(0.3, 1 - meetNoClicks * 0.08)})`;
+    const noScale = Math.max(0.05, 1 - meetNoClicks * 0.1);
+    noBtn.style.transform  = `scale(${noScale})`;
+    noBtn.style.opacity    = `${Math.max(0.1, noScale)}`;
 
-    if (meetNoClicks >= 4) {
-      noBtn.style.position   = 'absolute';
-      noBtn.style.top        = (Math.random() * 100 - 50)  + 'px';
-      noBtn.style.left       = (Math.random() * 300 - 150) + 'px';
-      noBtn.style.transition = 'none';
-    }
     if (meetNoClicks >= 10) {
-      noBtn.style.display = 'none';
+      noBtn.style.visibility = 'hidden';
       document.getElementById('meetTitle').textContent = "YOU KNOW I'M TAKING YOU ANYWAY 😌💕";
       setEmotion(document.getElementById('char3'), 'angry');
     } else {
