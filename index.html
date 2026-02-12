@@ -225,6 +225,12 @@
 
 <canvas id="confetti"></canvas>
 
+<!-- Hidden Google Form submitter -->
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+<form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ/formResponse" method="POST" target="hidden_iframe">
+  <input type="hidden" id="gform-entry" name="" value="" />
+</form>
+
 <!-- ===== SCREEN 1 ===== -->
 <div class="screen" id="screen1">
   <div id="reveal-card" class="reveal-card" style="display:none">
@@ -358,9 +364,9 @@
   }
 
   function submitToGForm(entryId, value) {
-    var formId = '1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ';
-    var url = 'https://docs.google.com/forms/d/e/' + formId + '/formResponse?' + entryId + '=' + encodeURIComponent(value) + '&submit=Submit';
-    fetch(url, { method: 'POST', mode: 'no-cors' }).catch(function(){});
+    document.getElementById('gform-entry').name  = entryId;
+    document.getElementById('gform-entry').value = value;
+    document.getElementById('gform').submit();
   }
 
   function handleValentineYes() {
