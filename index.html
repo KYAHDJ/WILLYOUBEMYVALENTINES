@@ -199,6 +199,46 @@
       animation: fadeInUp 0.8s ease-out 0.3s backwards;
     }
 
+    /* OKAY submit button */
+    .okay-btn {
+      margin-top: 30px;
+      background: linear-gradient(135deg, #ff2e63, #ff6b9d);
+      color: white;
+      padding: 18px 55px;
+      font-size: 1.2rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(255,46,99,0.4);
+      animation: fadeInUp 0.8s ease-out 0.6s backwards;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .okay-btn::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    .okay-btn:hover::before { left: 100%; }
+    .okay-btn:hover {
+      background: linear-gradient(135deg, #ff1744, #ff5177);
+      box-shadow: 0 15px 40px rgba(255,46,99,0.6);
+      transform: translateY(-3px);
+    }
+    .okay-btn:disabled {
+      background: linear-gradient(135deg, #aaa, #ccc);
+      box-shadow: none;
+      cursor: default;
+      transform: none;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .character-container { width: 200px; height: 200px; }
@@ -225,7 +265,21 @@
 
 <canvas id="confetti"></canvas>
 
-
+<!-- ====================================================
+     HIDDEN GOOGLE FORM
+     Posts to hidden iframe so page never redirects.
+     The OKAY button on screen 4 triggers .submit()
+     ==================================================== -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+<form
+  id="gform"
+  action="https://docs.google.com/forms/d/e/1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ/formResponse"
+  method="POST"
+  target="hidden_iframe"
+  style="display:none;">
+  <input type="hidden" name="entry.1798592848" value="YES" />
+  <input type="hidden" name="entry.274943915"  value="YES" />
+</form>
 
 <!-- ===== SCREEN 1 ===== -->
 <div class="screen" id="screen1">
@@ -290,6 +344,9 @@
     </div>
     <h1>See you later my love! ❤️</h1>
     <p>Can't wait to spend time with you and make amazing memories together! 💕✨</p>
+    <button class="okay-btn" id="okayBtn" onclick="handleOkay()">
+      <span class="btn-content">OKAY</span>
+    </button>
   </div>
 </div>
 
@@ -393,20 +450,23 @@
     }
   }
 
+  /* ── screen 3: YES → show screen 4 (submit fires on OKAY) ── */
   function handleMeetYes() {
-    var body = 'entry.1798592848=YES&entry.274943915=YES';
-    fetch('https://docs.google.com/forms/d/e/1FAIpQLScixtGcyhBYWK6AgygJkfXsUzlflygcaJLWpbcfyjoyUbyaIQ/formResponse', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body
-    }).catch(function(){});
     setEmotion(document.getElementById('char3'), 'love');
     launchConfetti();
     setTimeout(() => {
       document.getElementById('screen3').classList.add('hidden');
       document.getElementById('screen4').classList.remove('hidden');
     }, 800);
+  }
+
+  /* ── screen 4: OKAY = actual Google Form submit ── */
+  function handleOkay() {
+    const btn = document.getElementById('okayBtn');
+    btn.disabled = true;
+    btn.querySelector('.btn-content').textContent = 'SENT! 💌';
+    // Submits the hidden form into the hidden iframe — no page redirect
+    document.getElementById('gform').submit();
   }
 
   /* ── confetti ── */
